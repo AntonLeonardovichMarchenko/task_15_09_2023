@@ -1,0 +1,111 @@
+"""
+1. Написать свой генератор последовательностей, свой тернарный оператор
+2. Написать свой декоратор
+3. Написать декоратор, замеряющий время выполнение декорируемой функции.
+4. Сравнить время создания генератора и списка с элементами:
+   натуральные числа от 1 до 1000000 (создание объектов оформить в виде функций).
+"""
+import GensIters
+import makers
+
+
+def DoIt():
+
+    # самосбрасываемый итератор. Объект-преставитель класса GensIters.SecretsIterator.
+    # После отработки заданного в конструкторе количества обращений, которое сопровождается
+    # возбуждением исключения итератор готов к повторному применению.
+    si = GensIters.SecretsIterator(100)
+
+    print('The first approach ......')
+    secretsStrings = list()
+    while True:
+        try:
+            secretsStrings.append(next(si))
+        except StopIteration:
+            print('si is worked')
+            break
+
+    i = 0
+    for ss in secretsStrings:
+        print(f'{i}___{ss}')
+        i += 1
+
+    print('The second approach .....')
+    secretsStrings.clear()
+    while True:
+        try:
+            secretsStrings.append(next(si))
+        except StopIteration:
+            print('si is worked')
+            break
+
+    i = 0
+    for ss in secretsStrings:
+        print(f'{i}___{ss}')
+        i += 1
+
+# ========================================================================
+
+    print('************************ list Iterator *************************')
+    lstIter = makers.listIter_0(si)
+    # самосбрасываемый итератор создаёт ПРОСТОЙ одноразовый объект-итератор
+    # так что здесь его лучше НЕ перебирать... А не то lstIter придётся
+    # создавать заново!
+    # for li in lstIter:
+    #     print(li)
+
+    print('************************ diction Iterator **********************')
+    # варианты вызова makers.dict_Iter_0:
+    # прямой - с непосредственной передачей итератора makers.listIter_0
+    dictIter = makers.dict_Iter_0(makers.listIter_0(si))
+    # 'опосредованный' - с передачей результата выполнения итератора makers.listIter_0
+    # dictIter = makers.dict_Iter_0(lstIter)
+    #
+
+
+    # Перебор значений словаря по значению из списка ключей
+    # такая вот у словаря индексация
+    for k in dictIter.keys():
+        print(f'{k}-{dictIter[k]}')
+
+    # Замечание
+    # А вообще, при создании словаря, можно вообще не указывать для ключей никаких значений:
+    # при создании элемента словаря вместо его значения будет автоматически подставлено
+    # значение None. Но словарь при этом всё равно останется словарём - как список ключей
+    # с пустыми значениями. Далее эленты словаря можно будет модифицировать, добавляя к
+    # выбранному по значению ключа элементу словаря новое значение вместо пустого старого
+    # значения ...
+
+    # построение словаря, в котором ключами являются secretsStrings:
+    # ключи из secretsStrings словаря со значениями None, позже замещёнными значениями
+    # перечисления lstValue.
+    si = GensIters.SecretsIterator()  # здесь количество подходов итератора по умолчанию
+
+    print('................')
+    dictSecretStrings = dict()
+    while True:
+        try:
+            dictSecretStrings[next(si)] = None
+        except StopIteration:
+            print('si is worked')
+            break
+
+    # количество элементов перечисления lstValue определяется
+    # длиной списка ключей словаря secretsStrings. второй аргумент -  ===========
+    ri = GensIters.RandIterator(len(dictSecretStrings.keys()), 100)
+
+    # к словарю со случайными значениями ключей и установленными в None значениями,
+    # присвоили НОВЫЕ случайные значения в диапазоне от 0.00 до 100.00
+
+    makers.dictModifyerValues(dictSecretStrings, ri)
+
+    print(dictSecretStrings)
+
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    GensIters.GoDecorators()
+
+def main():
+    DoIt()
+
+if __name__ == '__main__':
+    main()
