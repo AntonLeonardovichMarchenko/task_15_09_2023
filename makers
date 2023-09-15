@@ -1,0 +1,70 @@
+import string
+import secrets
+
+
+
+"""
+- генератор случайных символов
+- генератор пар (число, строка)
+- генератор словаря {число: строка}
+
+- объект декорирования - функция summator
+"""
+
+# secrets.choice() - method and pass the string.ascii_letters + string.digits as an parameters.
+# Метод secrets.choice() используется для генерации более безопасной случайной строки,
+# чем random.choice(). Это криптографически случайный генератор строк, который гарантирует (во как...),
+# что никакие два процесса не смогут получить одинаковые результаты одновременно с использованием
+# метода secrets.choice().
+
+def makeSecrets(length = 10):
+
+    # length - define the length of the string
+    res = ''.join(secrets.choice(string.ascii_letters + string.digits) for x in range(length))
+    return res
+
+def listIter_0(si):
+    ListIter = ((i, next(si)) for i in range(si.limit))
+    return ListIter
+
+def dict_Iter_0(listIter):
+    DictIter = {lg[0]: lg[1] for lg in listIter}
+    # это ТОЛЬКО отладочный демо-вывод.
+    # Он не имеет никакого отношения к созданию словаря
+    for k in DictIter.keys():
+        print(f'{k}:{DictIter[k]}')
+    # ====================================================================
+    return DictIter
+
+def dictModifyerValues(diction, ri):
+    for key in diction.keys():
+        try:
+            diction[key] = next(ri)
+        except StopIteration:  # это исключение в таком контексте НЕ возбуждается.
+            print('ri is worked')
+            break
+
+
+# объект декорирования - функция summator
+def summator(values, ret=0):
+    print(ret)
+    result = None
+    if ret == 0:
+        result = 0
+        for val in values:
+            result = result + val
+    elif ret == '':
+        result = ''
+        for val in values:
+            result = result + str(val)
+
+    return result
+
+# ========================================================================
+# def timeTestFunction(testValue):
+#
+#     for tst in range(testValue):
+#         tst+=1
+
+
+
